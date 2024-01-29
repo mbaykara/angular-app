@@ -3,7 +3,11 @@ FROM node:lts-alpine
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+RUN apk update && \
+  apk upgrade && \
+  adduser -D -u 1001 appuser
+
+COPY package*.json /usr/src/app
 
 # Install app dependencies
 
