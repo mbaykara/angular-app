@@ -18,7 +18,7 @@
      stage('deploy') {
         agent { label 'test'}
         steps {
-             sh 'docker run -d baykara/angular-app:${env.BUILD_NUMBER}'
+             sh "docker run -d baykara/angular-app:${env.BUILD_NUMBER}"
       }
 
     }
