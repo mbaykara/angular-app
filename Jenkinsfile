@@ -20,7 +20,7 @@
     }
 
        stage('deploy') {
-        agent { label 'test'}
+        agent { label 'ssh'}
         steps {
              sh 'docker run nginx'
       }
