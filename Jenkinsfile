@@ -18,5 +18,12 @@
       }
 
     }
+
+       stage('deploy') {
+        steps {
+             sh 'docker run nginx'
+      }
+
+    }
   }
 }
