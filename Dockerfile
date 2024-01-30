@@ -1,21 +1,21 @@
-FROM node:lts-alpine
+# Stage 1: Build Angular app
+FROM node:20 AS builder
 
-# Create app directory
-WORKDIR /usr/src/app
-USER root
-RUN apk update && \
-  apk upgrade && \
-  adduser -D -u 1001 appuser
+WORKDIR /app
 
-COPY package*.json /usr/src/app
+COPY package.json package-lock.json ./
+RUN npm install
 
-# Install app dependencies
-
-RUN npm install 
-
-# Bundle app source
 COPY . .
-RUN npm run build
-USER appuser
-EXPOSE 4200
-CMD [ "npm", "run", "start"]
+RUN npm run build 
+
+# Stage 2: Create NGINX image
+FROM nginx:1.21-alpine
+
+# Copy the built artifacts from the previous stage
+COPY --from=builder /app/dist/fe-app/browser /usr/share/nginx/html
+
+EXPOSE 80
+
+# Command to run NGINX
+CMD ["nginx", "-g", "daemon off;"]
